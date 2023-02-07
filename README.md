@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/19392104/217358543-1a589bea-9cf0-4922-9b2b-aae28e617820.png">
+</p>
+
 # spriterot
 Command line utility to create spritesheets of rotated sprites.
 
@@ -35,12 +39,32 @@ Create a spritesheet containing 9 frames of `input_image.png`, from 0 to 90 degr
 spriterot -r 9 -f 0 -t 90 -m 1 -o output_image_from_0_to_90.png input_image.png
 ```
 
+
 Create a spritesheet containing 20 frames of `input_image.png`, from 0 to 360 degrees, in a 2 columns grid. Verbose output.
 ```bash
 spriterot -v --columns 2 -r 20 -o output_image_from_0_to_90.png input_image.png
 ```
 
+
 Create a spritesheet containing 36 frames of `input_image.png`, from 0 to 360 degrees, keeping the size of the original source image for generated frames (could lead to cropped frames).
 ```bash
 spriterot -r 36 --keep-size -o output_image_from_0_to_90.png input_image.png
 ```
+
+## Outputs
+
+`rotsprite`: best results for standard pixel art.
+
+![kirby-no-background-table-78-78-rotsprite](https://user-images.githubusercontent.com/19392104/217350096-ef44d493-9c46-4679-8261-d459a098d93d.png)
+
+`shearing`: best results for keeping shades of dither patterns, e.g. Playdate graphics with dithering.
+
+![kirby-no-background-table-78-78-shearing](https://user-images.githubusercontent.com/19392104/217350302-6e57b1df-99ea-4622-98a6-e6de48fbac5a.png)
+
+`nearest`: standard algorithm, nothing special.
+
+![kirby-no-background-table-78-78-nearest](https://user-images.githubusercontent.com/19392104/217350372-274bf2ec-2b1c-45c2-a91f-e67dfc884890.png)
+
+`linear`: best results for conventional graphics, not pixel art. 
+
+![kirby-no-background-table-78-78](https://user-images.githubusercontent.com/19392104/217350403-22f86bd7-24a0-4af2-8d9b-9c14104f8d39.png)
