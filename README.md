@@ -2,7 +2,7 @@
 Command line utility to create spritesheets of rotated sprites.
 
 ## Usage
-````bash
+```
 spriterot --help                                                        
 spriterot
 
