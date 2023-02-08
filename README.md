@@ -14,6 +14,7 @@ Command line utility to create spritesheets of rotated sprites.
 - Overridable width and height for generated frames, or force keeping the same size.
 - Configurable margin around generated frames.
 - Verbose output to get info about the generated spritesheet.
+- Can resolve the number of rotations to generate from the image filename: e.g. image`-rotations-36`.png for 36 frames.
 
 ## Usage
 ```
