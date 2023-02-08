@@ -5,6 +5,16 @@
 # spriterot
 Command line utility to create spritesheets of rotated sprites.
 
+## Features
+- By default, generates spritesheets wasting as little space as possible.
+- 4 rendering algorithms: RotSprite, shearing, nearest, linear.
+- Resizes the sprite to make the rotations non-transparent pixels fit just right.
+- Configurable (min, max, clamp, exact value) number of rows and columns in the generated spritesheet.
+- Configurable number of frames to generate and range of the rotation.
+- Overridable width and height for generated frames, or force keeping the same size.
+- Configurable margin around generated frames.
+- Verbose output to get info about the generated spritesheet.
+
 ## Usage
 ```
 spriterot --help                                                        
