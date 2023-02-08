@@ -4,7 +4,7 @@ import strformat
 import argparse
 import strutils
 import os
-import re
+import regex
 import spriterot/common
 import spriterot/[rotsprite, shearing, nearest, linear]
 
@@ -38,11 +38,11 @@ var logger: Logger
 proc generate(filename: string, rotations: int, fromAngle: int, toAngle: int, keepSize: bool, frameWidth: int32, frameHeight: int32,
     columnsOption, rowsOption: ValueOption, margin: int, algorithm: Algorithm, output: Option[string] = none(string)) =
   # Get the source filename without extension.
-  var groups = newSeq[string](1)
+  var groups: RegexMatch
   let match = filename.match(re"(.+)\..{1,4}$", groups)
   var imagePath: string
   if match:
-    imagePath = groups[0]
+    imagePath = groups.group(0, filename)[0]
   else:
     raise newException(ShortCircuit, "Source filename is not valid.")
   
@@ -167,10 +167,10 @@ when isMainModule:
       rotations = opts.rotations.parseInt
       logger.echo(fmt"Using command line rotations option")
     else:
-      var groups = newSeq[string](1)
+      var groups: RegexMatch
       let match = filename.match(re".*-rotations-(\d+)\..{1,4}", groups)
       if match:
-        rotations = groups[0].parseInt
+        rotations = groups.group(0, filename)[0].parseInt
         logger.echo(fmt"Using filename rotations definition")
       else:
         raise newException(ShortCircuit, "No valid definition on how many rotations to generate found.")
@@ -187,15 +187,20 @@ when isMainModule:
     if opts.columns == "":
       columnsOption = ValueOption(mode: ValueMode.none, a: 0, b: 0)
     else:
-      var groups = newSeq[string](2)
+      var groups: RegexMatch
       if opts.columns.match(re"min:(\d+)$", groups):
-        columnsOption = ValueOption(mode: ValueMode.min, a: groups[0].parseInt, b: 0)
+        let value = groups.group(0, opts.columns)[0].parseInt
+        columnsOption = ValueOption(mode: ValueMode.min, a: value, b: 0)
       elif opts.columns.match(re"max:(\d+)$", groups):
-        columnsOption = ValueOption(mode: ValueMode.max, a: groups[0].parseInt, b: 0)
+        let value = groups.group(0, opts.columns)[0].parseInt
+        columnsOption = ValueOption(mode: ValueMode.max, a: value, b: 0)
       elif opts.columns.match(re"clamp:(\d+)-(\d+)$", groups):
-        columnsOption = ValueOption(mode: ValueMode.clamp, a: groups[0].parseInt, b: groups[1].parseInt)
+        let valueA = groups.group(0, opts.columns)[0].parseInt
+        let valueB = groups.group(1, opts.columns)[0].parseInt
+        columnsOption = ValueOption(mode: ValueMode.clamp, a: valueA, b: valueB)
       elif opts.columns.match(re"(\d+)$", groups):
-        columnsOption = ValueOption(mode: ValueMode.value, a: groups[0].parseInt, b: 0)
+        let value = groups.group(0, opts.columns)[0].parseInt
+        columnsOption = ValueOption(mode: ValueMode.value, a: value, b: 0)
       else:
         raise newException(ShortCircuit, "Invalid columns option.")
     
@@ -204,15 +209,20 @@ when isMainModule:
     if opts.rows == "":
       rowsOption = ValueOption(mode: ValueMode.none, a: 0, b: 0)
     else:
-      var groups = newSeq[string](2)
+      var groups: RegexMatch
       if opts.rows.match(re"min:(\d+)$", groups):
-        rowsOption = ValueOption(mode: ValueMode.min, a: groups[0].parseInt, b: 0)
+        let value = groups.group(0, opts.rows)[0].parseInt
+        rowsOption = ValueOption(mode: ValueMode.min, a: value, b: 0)
       elif opts.rows.match(re"max:(\d+)$", groups):
-        rowsOption = ValueOption(mode: ValueMode.max, a: groups[0].parseInt, b: 0)
+        let value = groups.group(0, opts.rows)[0].parseInt
+        rowsOption = ValueOption(mode: ValueMode.max, a: value, b: 0)
       elif opts.rows.match(re"clamp:(\d+)-(\d+)$", groups):
-        rowsOption = ValueOption(mode: ValueMode.clamp, a: groups[0].parseInt, b: groups[1].parseInt)
+        let valueA = groups.group(0, opts.rows)[0].parseInt
+        let valueB = groups.group(1, opts.rows)[0].parseInt
+        rowsOption = ValueOption(mode: ValueMode.clamp, a: valueA, b: valueB)
       elif opts.rows.match(re"(\d+)$", groups):
-        rowsOption = ValueOption(mode: ValueMode.value, a: groups[0].parseInt, b: 0)
+        let value = groups.group(0, opts.rows)[0].parseInt
+        rowsOption = ValueOption(mode: ValueMode.value, a: value, b: 0)
       else:
         raise newException(ShortCircuit, "Invalid rows option.")
 
