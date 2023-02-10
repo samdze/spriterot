@@ -2,7 +2,7 @@
   <img src="https://user-images.githubusercontent.com/19392104/217358543-1a589bea-9cf0-4922-9b2b-aae28e617820.png">
 </p>
 
-# spriterot
+# spriterot ![build workflow](https://github.com/samdze/spriterot/actions/workflows/build.yml/badge.svg)
 Command line utility to create spritesheets of rotated sprites.
 
 ## Features
