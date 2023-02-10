@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.0.1"
+version       = "1.0.2"
 author        = "Samuele Zolfanelli"
 description   = "Command line utility to create spritesheets of rotated sprites."
 license       = "MIT"

@@ -239,7 +239,7 @@ when isMainModule:
       echo err.help
     else:
       stderr.writeLine getCurrentExceptionMsg()
-    quit(1)
+      quit(1)
   except:
     stderr.writeLine getCurrentExceptionMsg()
     quit(1)
