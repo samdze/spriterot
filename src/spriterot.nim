@@ -36,7 +36,7 @@ const algorithms: array[Algorithm, auto] = [
 var logger: Logger
 
 proc generate(filename: string, rotations: int, fromAngle: int, toAngle: int, keepSize: bool, frameWidth: int32, frameHeight: int32,
-    columnsOption, rowsOption: ValueOption, margin: int, algorithm: Algorithm, output: Option[string] = none(string)) =
+    columnsOption, rowsOption: ValueOption, margin: int, algorithm: Algorithm, output: Option[string] = none(string), outdir: Option[string] = none(string)) =
   # Get the source filename without extension.
   var groups: RegexMatch
   let match = filename.match(re"(.+)\..{1,4}$", groups)
@@ -131,6 +131,12 @@ proc generate(filename: string, rotations: int, fromAngle: int, toAngle: int, ke
   var outputPath: string
   if output.isSome():
     outputPath = output.get()
+  elif outdir.isSome():
+    let outputDir = normalizePathEnd(outdir.get(), trailingSep = true)
+    if not dirExists(outputDir):
+      createDir(outputDir)
+    let imageName = splitPath(imagePath).tail
+    outputPath = fmt"{outputDir}{imageName}-table-{bounds.x.int}-{bounds.y.int}.png"
   else:
     outputPath = fmt"{imagePath}-table-{bounds.x.int}-{bounds.y.int}.png"
   
@@ -154,6 +160,7 @@ when isMainModule:
     option("-f", "--from", help = "Angle in degrees from which to start generating rotations.", default = some("0"))
     option("-t", "--to", help = "Angle in degrees up to which to generate rotations.", default = some("360"))
     option("-o", "--output", help = "Output filename.")
+    option("-d", "--outdir", help = "Output directory.")
     arg("source", help = "Image to generate the rotations of.")
   
   try:
@@ -161,6 +168,7 @@ when isMainModule:
     logger = Logger(verbose: opts.verbose)
     let filename = opts.source
     let output = if opts.output != "": some(opts.output) else: none(string)
+    let outdir = if opts.outdir != "": some(opts.outdir) else: none(string)
 
     var rotations = 0
     if opts.rotations != "":
@@ -232,7 +240,7 @@ when isMainModule:
     let algorithm = parseEnum[Algorithm](opts.algorithm)
 
     generate(filename, rotations, fromAngle, toAngle, opts.keepSize,
-      width, height, columnsOption, rowsOption, margin, algorithm, output)
+      width, height, columnsOption, rowsOption, margin, algorithm, output, outdir)
 
   except ShortCircuit as err:
     if err.flag == "argparse_help":
